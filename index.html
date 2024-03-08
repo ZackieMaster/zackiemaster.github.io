@@ -1,0 +1,228 @@
+<!DOCTYPE html><html>
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Josefin+Sans" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<title>MasterZack's JeevanKatha</title>
+<style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Josefin Sans;
+      font-size: 20px;
+      display: flex;
+    }
+      p {
+    font-family: Josefin Sans;
+    font-size: 18px; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: 400; 
+    line-height: 29px;
+      }
+    
+
+    h2 {
+      font-size: 1.5em;
+    }
+
+    ul {
+      list-style-type: none;
+    }
+
+     #sidebar {
+      height: 100%;
+      width: 0%;
+      position: fixed;
+      top: 0;
+      right: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      transition: width 0.3s;
+      color: white;
+     }
+
+
+    #sidebar a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 18px;
+      color: white;
+      display: block;
+      transition: 0.2s;
+    }
+
+    #sidebar a:hover {
+      color: #f1f1f1;
+    }
+
+    #sidebar .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+
+    #main {
+      transition: margin-right .5s;
+      padding: 16px;
+      margin-left: 0;
+      position: relative;
+        }     
+
+    .openbtn {
+      font-size: 20px;
+      cursor: pointer;
+      background-color: #111;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      position: absolute;
+      left: 0;
+    }
+
+    .openbtn:hover {
+      background-color: #444;
+    }
+    
+    @media only screen and (min-width: 600px) {
+    #sidebar {
+        width: 0;
+        padding-top: 3.25%;
+    }
+}
+
+        @media only screen and (max-width: 599px) {
+        #sidebar {
+        width: 0;
+        padding-top: 11%;
+    }
+        
+        }
+
+  </style>
+</head>
+<body>
+  
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<div id="content-atheism" class="content-page"></div>
+<div id="content-anime" class="content-page"></div>
+<div id="content-quotes" class="content-page"></div>
+<div id="content-index" class="content-page"></div>
+
+      <div id="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <a href="javascript:void(0)" onclick="loadPage('atheism.html')">「☘」From Islam to Atheism</a>
+<a href="javascript:void(0)" onclick="loadPage('anime.html')">「☘」The Anime Journey</a>
+<a href="javascript:void(0)" onclick="loadPage('quotes.html')">「☘」Some Important Quotes</a>
+<a href="javascript:void(0)" onclick="loadPage('index.html')">「☘」Home</a>
+
+      </div>
+      <script>
+      
+     var homepageContent = `
+    <h1><center>Hi, I'm Master Zack</center></h1>
+    <h2><center>You can also call me Zackie </center></h2>
+    <p>Well, I basically got this domain for 1 year and then I thought if I have a domain, it should be hosted too. So, I hosted it. After that, I thought now that I have a web page, I should have some content too. That's why, I'm going to write some topics about my life on this website which you will be able to read through the sidebar</p>
+`;
+        function loadPage(pageUrl) {
+          if (pageUrl === 'index.html') {
+        $("#content").html(homepageContent);
+        closeNav();
+        history.pushState({ content: homepageContent }, null, "/");
+        return;
+    }
+    
+    $.ajax({
+        url: pageUrl,
+        type: "GET",
+        dataType: "html",
+        success: function (data) {
+            
+            $("#content").html(data);
+
+            var pageName = pageUrl.split(".")[0];
+            var newUrl = (pageName === "index") ? "/" :"/" + pageName;
+
+            history.pushState({ content: data }, null, newUrl);
+            
+            closeNav(); 
+        },
+        error: function (xhr, status, error) {
+            console.error("Error loading page: " + status, error);
+        }
+    });
+
+}
+
+function getContentContainerId(pageUrl) {
+    
+    var pageName = pageUrl.split(".")[0];
+    return "content-" + pageName;
+}
+
+window.addEventListener('popstate', function (event) {
+    if (event.state && event.state.content) {
+        $("#content").html(event.state.content);
+    } else {
+        
+        $("#content").html(homepageContent)
+    }
+});
+      
+      </script>
+
+  <div id="main">
+    <button class="openbtn" onclick="toggleNav()">☰ </button>
+  </div>
+
+  <script>
+    function openNav() {
+          event.stopPropagation();
+    var width = window.innerWidth;
+    var sidebarWidth = (width >= 600) ? "20%" : "72%";
+    document.getElementById("sidebar").style.width = sidebarWidth;
+        
+}
+
+function closeNav() {
+    setTimeout(function () {
+        document.getElementById("sidebar").style.width = "0";
+    }, 50);
+}
+
+function toggleNav() {
+    var sidebar = document.getElementById("sidebar");
+    var width = window.innerWidth;
+    var sidebarWidth = (width >= 600) ? "20%" : "72%";
+
+    if (sidebar.style.width === sidebarWidth) {
+        closeNav();
+    } else {
+        openNav();
+  }
+}
+
+document.addEventListener('click', function (event) {
+    var sidebar = document.getElementById('sidebar');
+    if (event.target !== sidebar && !sidebar.contains(event.target)) {
+        closeNav();
+    }
+});
+
+  </script>
+    <div id="content">
+       
+  <h1><center>Hi, I'm Master Zack</center></h1>
+  <h2><center> You can also call me Zackie </center></h2>
+        <p> Well, I basically got this domain for 1 year and then I thought if I have a domain, it should be hosted too. So, I hosted it. After that, I thought now that I have a web page, I should have some content too. That's why, I'm going to write some topic about my life on this website which you will be able to read through the sidebar</p>
+    </div>
+      </body>
+</html>
+  
